@@ -7,15 +7,25 @@
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 #include <sensor_msgs/point_cloud2_iterator.h>
+#include <eigen3/Eigen/Dense>
 
-template<N>
 class GraphNode {
  public:
 	 GraphNode();
+	 
 	 GraphNode(const pcl::PointXYZ &point);
 	 
 	 ~GraphNode();
 
+	 void compute_normal_by_neighbors();
+	 
+	 void set_neighbors(const std::vector<Eigen::Vector3d> &neighbors);
+
+	 void remove_neighbor(const int neighbor_index);
+		
+
  private:
-	 pcl::PointXYZ point;
+	 pcl::PointXYZ shot_;
+	 std::vector<Eigen::Vector3d> edges_;
+	 Eigen::Vector3d normal_; 
 };

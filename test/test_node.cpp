@@ -8,12 +8,19 @@
 #include <pcl/point_types.h>
 #include <sensor_msgs/point_cloud2_iterator.h>
 
+void velodyneCallback(const sensor_msgs::PointCloud2 &msg){
+	ROS_INFO("Number of Points in MEssage: [%f]", static_cast<double>(msg.width));
+	//ROS_INFO("Callback Message Size: [%f]", msg)
+}
+
 int main(int argc, char **argv)
 {
         ros::init(argc, argv, "ground_classifier");
 
         ros::NodeHandle nh;
         ros::NodeHandle private_nh("~");
+
+	ros::Subscriber sub = nh.subscribe("/kitti/velo/pointcloud", 10, velodyneCallback);
 
         ros::spin();
 
