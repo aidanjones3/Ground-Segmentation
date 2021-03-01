@@ -23,6 +23,7 @@ class GraphNode {
 
 	 void remove_neighbor(const int neighbor_index);
 		
+	 Eigen::Vector3d get_normal();
 
  private:
 	 pcl::PointXYZ shot_;
