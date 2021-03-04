@@ -10,4 +10,4 @@ Objectives
 
 Given the KITTI datset, create a runable ROS node that implements the following:
 
-![Implementation](Ground Segmentation.jpg)
+![alt text](https://github.com/aidanjones3/Ground-Segmentation/blob/master/Ground_Segmentation.png?raw=true)
