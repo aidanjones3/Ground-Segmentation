@@ -18,16 +18,18 @@ Descriptions will be updated here as they are settled upon...
 -----
 Downloading/Building
 -----
-'cd /your/catkin_ws/src/'
+```
+cd /your/catkin_ws/src/
+```
 
 Once you are in the right directory, clone this repo using the command below.
-
+```
 git clone https://github.com/aidanjones3/Ground-Segmentation.git'
-
+```
 The repo can be build by running the following command in your catkin_ws
-
-'catkin_make'
-
+```
+catkin_make
+```
 -----
 Running the ROS Nodes
 -----
