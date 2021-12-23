@@ -35,3 +35,9 @@ Running the ROS Nodes
 -----
 
 Placeholder until project is finished.
+
+-----
+Useful Links
+-----
+https://github.com/TixiaoShan/LIO-SAM/pull/159
+https://github.com/TixiaoShan/LIO-SAM/blob/master/config/doc/kitti2bag/kitti2bag.py
