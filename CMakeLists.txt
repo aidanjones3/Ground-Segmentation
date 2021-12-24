@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(ground_classifier)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-add_compile_options(-std=c++11)
+add_compile_options(-std=c++14)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -16,13 +16,13 @@ find_package(catkin REQUIRED COMPONENTS
   velodyne_laserscan
   velodyne_msgs
   velodyne_pointcloud
+  pcl_ros
+  pcl_conversions
 )
 
 ## System dependencies are found with CMake's conventions
 find_package(Eigen3 REQUIRED)
 find_package(Boost REQUIRED COMPONENTS system)
-
-
 
 
 ## Uncomment this if the package has a setup.py. This macro ensures
@@ -113,7 +113,7 @@ find_package(Boost REQUIRED COMPONENTS system)
 catkin_package(
    INCLUDE_DIRS include
 #  LIBRARIES velodyne_test
-   CATKIN_DEPENDS roscpp rospy sensor_msgs std_msgs velodyne_driver velodyne_laserscan velodyne_msgs velodyne_pointcloud
+   CATKIN_DEPENDS roscpp rospy sensor_msgs std_msgs velodyne_driver velodyne_laserscan velodyne_msgs velodyne_pointcloud pcl_ros pcl_conversions
 #  DEPENDS system_lib
 )
 
@@ -128,6 +128,7 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
   ${EIGEN3_INCLUDE_DIRS}
   ${Boost_INCLUDE_DIRS}
+  ${PCL_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
