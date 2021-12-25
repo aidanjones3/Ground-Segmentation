@@ -7,7 +7,7 @@ GraphNode::GraphNode(){
 	//ROS_ERROR_ONCE("Please provide a point when creating a GraphNode.");
 }
 
-GraphNode::GraphNode(const pcl::PointXYZ &point) : shot_(point){};
+GraphNode::GraphNode(const pcl::PointXYZI &point) : shot_(point){};
 
 GraphNode::~GraphNode(){};
 

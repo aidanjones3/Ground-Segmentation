@@ -3,7 +3,7 @@
 #include <std_msgs/String.h>
 #include <sensor_msgs/PointCloud2.h>
 #include <sstream>
- #include <pcl_conversions/pcl_conversions.h>
+#include <pcl_conversions/pcl_conversions.h>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 #include <sensor_msgs/point_cloud2_iterator.h>
@@ -13,7 +13,7 @@ class GraphNode {
  public:
 	 GraphNode();
 	 
-	 GraphNode(const pcl::PointXYZ &point);
+	 GraphNode(const pcl::PointXYZI &point);
 	 
 	 ~GraphNode();
 
@@ -26,7 +26,7 @@ class GraphNode {
 	 Eigen::Vector3d get_normal();
 
  private:
-	 pcl::PointXYZ shot_;
+	 pcl::PointXYZI shot_;
 	 std::vector<Eigen::Vector3d> edges_;
 	 Eigen::Vector3d normal_; 
 };
