@@ -9,8 +9,11 @@
 #include <sensor_msgs/point_cloud2_iterator.h>
 
 void velodyneCallback(const sensor_msgs::PointCloud2 &msg){
-	ROS_INFO("Number of Points in MEssage: [%f]", static_cast<double>(msg.width));
+	ROS_INFO("Number of Points in Message: [%f]", static_cast<double>(msg.width));
 	//ROS_INFO("Callback Message Size: [%f]", msg)
+
+    // Here we can call the graph utilities function create data frame
+
 }
 
 int main(int argc, char **argv)
@@ -20,7 +23,7 @@ int main(int argc, char **argv)
         ros::NodeHandle nh;
         ros::NodeHandle private_nh("~");
 
-	ros::Subscriber sub = nh.subscribe("/kitti/velo/pointcloud", 10, velodyneCallback);
+	    ros::Subscriber sub = nh.subscribe("/points_raw", 10, velodyneCallback);
 
         ros::spin();
 

@@ -1,0 +1,14 @@
+//
+// Created by aidan on 12/25/21.
+//
+
+#ifndef GROUND_SEGMENTATION_UNDIRECTED_GRAPH_H
+#define GROUND_SEGMENTATION_UNDIRECTED_GRAPH_H
+
+
+class undirected_graph {
+
+};
+
+
+#endif //GROUND_SEGMENTATION_UNDIRECTED_GRAPH_H

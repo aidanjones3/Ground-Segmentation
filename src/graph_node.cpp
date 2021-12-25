@@ -1,6 +1,6 @@
 #include <ros/ros.h>
 #include <ros/console.h>
-#include "neighborhood_graph.h"
+#include "graph_node.h"
 #include <iostream>
 
 GraphNode::GraphNode(){

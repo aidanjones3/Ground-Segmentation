@@ -133,7 +133,8 @@ include_directories(
 
 ## Declare a C++ library
 add_library(${PROJECT_NAME}
-   src/neighborhood_graph.cpp
+		src/graph_node.cpp
+		src/undirected_graph.cpp
 )
 
 ## Add cmake target dependencies of the library
@@ -215,7 +216,7 @@ target_link_libraries(
 
 ## Add gtest based cpp test target and link libraries
 #catkin_add_gtest(${PROJECT_NAME}-test test/test_velodyne_test.cpp)
-catkin_add_gtest(${PROJECT_NAME}-test src/neighborhood_graph_test.cpp)
+catkin_add_gtest(${PROJECT_NAME}-test src/graph_node_test.cpp)
 
 if(TARGET ${PROJECT_NAME}-test)
 	target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME} ${Boost_LIBRARIES} ${catkin_LIBRARIES})
