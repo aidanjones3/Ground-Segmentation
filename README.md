@@ -15,7 +15,7 @@ Given the KITTI datset, create a runable ROS node that implements the following:
 
 The neighborhood graph construction is shown as seen below:
 
-![alt text](https://github.com/aidanjones3/Ground-Segmentation/blob/master/Neighborhood_Graph_Construction?raw=true)
+![alt text](https://github.com/aidanjones3/Ground-Segmentation/blob/master/Neighborhood_Graph%20_Construction.png)
 
 Descriptions will be updated here as they are settled upon...
 
