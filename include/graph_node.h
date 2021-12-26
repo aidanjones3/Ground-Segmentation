@@ -28,5 +28,6 @@ class GraphNode {
  private:
 	 pcl::PointXYZI shot_;
 	 std::vector<Eigen::Vector3d> edges_;
-	 Eigen::Vector3d normal_; 
+	 Eigen::Vector3d normal_;
+     int id_;
 };
