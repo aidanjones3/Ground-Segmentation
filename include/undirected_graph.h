@@ -22,10 +22,11 @@ class UndirectedGraph {
 
     ~UndirectedGraph();
 
+    size_t get_graph_size();
+
  private:
-    // Graph is stored as an unordered map, where the mapped value is
-    // the region the node belongs to.
-    std::unordered_map<int, GraphNode> graph_;
+    // Graph is stored as an Eigen matrix of GraphNoes.
+    Eigen::Matrix<GraphNode, Eigen::Dynamic, Eigen::Dynamic> graph_;
 
 
 };
