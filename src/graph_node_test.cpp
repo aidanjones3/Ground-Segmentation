@@ -3,6 +3,8 @@
 #include "graph_node.h"
 #include <gtest/gtest.h>
 
+
+
 std::vector<GraphNode> create_graph_nodes(){
 	std::vector<GraphNode> nodes;
 	return nodes;
@@ -43,5 +45,7 @@ TEST(ComputeNormal, nominalEdgesCreatesNominalNormal){
 
 int main(int argc, char **argv){
 	testing::InitGoogleTest(&argc, argv);
+    ros::init(argc, argv, "tester");
+    ros::NodeHandle nh;
 	return RUN_ALL_TESTS();
 }

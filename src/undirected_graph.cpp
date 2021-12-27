@@ -12,17 +12,31 @@ UndirectedGraph::UndirectedGraph(const sensor_msgs::PointCloud2 &msg) {
         ROS_ERROR_ONCE("Input point cloud for undirected graph does not contain any points.");
     }
     // Convert to PCL point cloud first
-    pcl::PointCloud <pcl::PointXYZI> pcl_cloud;
-    pcl::fromROSMsg(msg, pcl_cloud);
+    pcl::PCLPointCloud2 pcl_cloud;
+    pcl_conversions::toPCL(msg, pcl_cloud);
 
     // Deallocating matrix safely and setting new size
     graph_.resize(0,0);
     graph_.resize(msg.width, 1);
 
     // Create and add nodes to the undirected graph.
-    for (int i = 0; i < pcl_cloud.points.size(); ++i) {
-        GraphNode node(pcl_cloud.points[i]);
+    for (int i = 0; i < pcl_cloud.height * pcl_cloud.width; ++i) {
+        pcl::PointXYZI point;
+        // Getting information from pcl cloud and creating custom point from it
+        const double x = static_cast<double>(pcl_cloud.data[i * pcl_cloud.point_step + pcl_cloud.fields[0].offset]);
+        const double y = static_cast<double>(pcl_cloud.data[i * pcl_cloud.point_step + pcl_cloud.fields[1].offset]);
+        const double z = static_cast<double>(pcl_cloud.data[i * pcl_cloud.point_step + pcl_cloud.fields[2].offset]);
+        const double intensity = static_cast<double>(pcl_cloud.data[i * pcl_cloud.point_step + pcl_cloud.fields[3].offset]);
+        const int laser_id = static_cast<int>(pcl_cloud.data[i * pcl_cloud.point_step + pcl_cloud.fields[4].offset]);
+        point.x = x;
+        point.y = y;
+        point.z = z;
+        point.intensity = intensity;
+
+        // Create new graph node with custom point and add it to the undirected graph
+        GraphNode node(point, laser_id);
         graph_(i, 0) = node;
+
     }
 };
 

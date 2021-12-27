@@ -13,7 +13,7 @@ class GraphNode {
  public:
 	 GraphNode();
 	 
-	 GraphNode(const pcl::PointXYZI &point);
+	 GraphNode(const pcl::PointXYZI &point, const int ring_num);
 	 
 	 ~GraphNode();
 
@@ -30,4 +30,5 @@ class GraphNode {
 	 std::vector<Eigen::Vector3d> edges_;
 	 Eigen::Vector3d normal_;
      int id_;
+     int ring_id_;
 };

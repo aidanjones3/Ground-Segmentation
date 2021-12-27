@@ -216,11 +216,15 @@ target_link_libraries(
 
 ## Add gtest based cpp test target and link libraries
 #catkin_add_gtest(${PROJECT_NAME}-test test/test_velodyne_test.cpp)
-catkin_add_gtest(${PROJECT_NAME}-test src/graph_node_test.cpp)
-
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+catkin_add_gtest(${PROJECT_NAME}-test
+		src/graph_node_test.cpp
+		src/undirected_graph_test.cpp
+)
 if(TARGET ${PROJECT_NAME}-test)
 	target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME} ${Boost_LIBRARIES} ${catkin_LIBRARIES})
 endif()
+
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
