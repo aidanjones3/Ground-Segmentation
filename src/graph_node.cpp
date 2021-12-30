@@ -40,3 +40,17 @@ void GraphNode::remove_neighbor(const int neighbor_index) {}
 Eigen::Vector3d GraphNode::get_normal() {
     return normal_;
 }
+
+std::vector<Eigen::Vector3d> GraphNode::get_edges(){
+    return edges_;
+};
+
+int GraphNode::get_laser_id(){
+    return ring_id_;
+}
+
+pcl::PointXYZI GraphNode::get_shot(){
+    return shot_;
+};
+
+

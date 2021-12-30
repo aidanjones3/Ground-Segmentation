@@ -25,6 +25,12 @@ class GraphNode {
 		
 	 Eigen::Vector3d get_normal();
 
+     std::vector<Eigen::Vector3d> get_edges();
+
+     int get_laser_id();
+
+     pcl::PointXYZI get_shot();
+
  private:
 	 pcl::PointXYZI shot_;
 	 std::vector<Eigen::Vector3d> edges_;

@@ -37,9 +37,9 @@ TEST(ComputeNormal, nominalEdgesCreatesNominalNormal){
 	const auto normal = node.get_normal();
 	
 	// VERIFICATION
-	EXPECT_EQ(normal.x(), expected_normal.x());
-	EXPECT_EQ(normal.y(), expected_normal.y());
-	EXPECT_EQ(normal.z(), expected_normal.z());
+	EXPECT_NEAR(normal.x(), expected_normal.x(), 0.001);
+	EXPECT_NEAR(normal.y(), expected_normal.y(), 0.001);
+	EXPECT_NEAR(normal.z(), expected_normal.z(), 0.001);
 	
 }
 
