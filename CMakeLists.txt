@@ -135,6 +135,7 @@ include_directories(
 add_library(${PROJECT_NAME}
 		src/graph_node.cpp
 		src/undirected_graph.cpp
+		include/graph_utilities.h
 )
 
 ## Add cmake target dependencies of the library

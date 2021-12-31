@@ -45,3 +45,7 @@ UndirectedGraph::~UndirectedGraph() {};
 size_t UndirectedGraph::get_graph_size(){
     return graph_.size();
 }
+
+Eigen::Matrix<GraphNode, Eigen::Dynamic, Eigen::Dynamic> UndirectedGraph::get_graph(){
+    return graph_;
+};
