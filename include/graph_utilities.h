@@ -20,63 +20,97 @@ namespace graph_utilities {
 
     };
 
-    // Given an input graph, find all of its vertical edges. Its vertical edges are defined as
+    // Given an input graph and input node, find its vertical edges. Its vertical edges are defined as
     // the nodes with the closest yaw angle in the laser id above and below the current laser id.
     // To find the vertical neighbors, we iterate through each of the nodes of the graph. If they
-    // do not have any edges set, we look for that node's neighbors.
-    void find_vertical_neighbors(Eigen::Matrix <GraphNode, Eigen::Dynamic, Eigen::Dynamic> graph) {
-        int cur_laser_id = -1;
-        pcl::PointXYZI shot;
+    // meet the requirements, the input node's neighbors are set.
+    std::pair <GraphNode, GraphNode>
+    find_vertical_neighbors(GraphNode cur_node, Eigen::Matrix <GraphNode, Eigen::Dynamic, Eigen::Dynamic> graph) {
+        int cur_laser_id = cur_node.get_laser_id();
+        pcl::PointXYZI shot = cur_node.get_shot();
+        GraphNode top_neighbor;
+        GraphNode bottom_neighbor;
+        // Case when vertical neighbors are already set.
+        if (cur_node.get_edges().size() != 0) {
+            return std::make_pair(top_neighbor, bottom_neighbor);
+        }
+        double cur_yaw_angle = cartesian_to_polar_coordinates(shot.x, shot.y).first;
+        double top_yaw_angle_difference = 390.0;
+        double bottom_yaw_angle_difference = 390.0;
         // Iterate through every node in the graph to ensure we set the vertical neighbors.
         for (size_t i = 0; i < graph.cols(); ++i) {
-            // If this node hasn't been set yet, we look for its vertical neighbors.
-            if (graph(i, 0).get_edges().size() == 0) {
-                cur_laser_id = graph(i, 0).get_laser_id();
-                shot = graph(i, 0).get_shot();
-                GraphNode top_neighbor;
-                GraphNode bottom_neighbor;
-
-                // Look for vertical neighbors. Nodes with the closest yaw angle in the laser id above and below.
-                double cur_yaw_angle = cartesian_to_polar_coordinates(shot.x, shot.y).first;
-                double top_yaw_angle_difference = 390.0;
-                double bottom_yaw_angle_difference = 390.0;
-                for (size_t j = 0; j < graph.cols(); ++j) {
-                    // Case when node belongs to laser directly above current laser.
-                    if (j != i && graph(j, 0).get_laser_id() - cur_laser_id == 1) {
-                        pcl::PointXYZI potential_shot = graph(j, 0).get_shot();
-                        double yaw_angle = cartesian_to_polar_coordinates(potential_shot.x, potential_shot.y).first;
-                        if (abs(yaw_angle - cur_yaw_angle) < top_yaw_angle_difference) {
-                            top_neighbor = graph(j, 0);
-                            top_yaw_angle_difference = abs(yaw_angle - cur_yaw_angle);
-                        }
-                        // Case when node belongs to laser directly below current laser.
-                    } else if (j != i && graph(j, 0).get_laser_id() - cur_laser_id == -1) {
-                        pcl::PointXYZI potential_shot = graph(j, 0).get_shot();
-                        double yaw_angle = cartesian_to_polar_coordinates(potential_shot.x, potential_shot.y).first;
-                        if (abs(yaw_angle - cur_yaw_angle) < bottom_yaw_angle_difference) {
-                            bottom_neighbor = graph(j, 0);
-                            bottom_yaw_angle_difference = abs(yaw_angle - cur_yaw_angle);
-                        }
-                    } else {
-                        continue;
-                    }
+            // Case when node belongs to laser directly above current laser.
+            if (graph(i, 0).get_laser_id() - cur_laser_id == 1) {
+                pcl::PointXYZI potential_shot = graph(i, 0).get_shot();
+                double yaw_angle = cartesian_to_polar_coordinates(potential_shot.x, potential_shot.y).first;
+                if (abs(yaw_angle - cur_yaw_angle) < top_yaw_angle_difference) {
+                    top_neighbor = graph(i, 0);
+                    top_yaw_angle_difference = abs(yaw_angle - cur_yaw_angle);
                 }
-
+                // Case when node belongs to laser directly below current laser.
+            } else if (graph(i, 0).get_laser_id() - cur_laser_id == -1) {
+                pcl::PointXYZI potential_shot = graph(i, 0).get_shot();
+                double yaw_angle = cartesian_to_polar_coordinates(potential_shot.x, potential_shot.y).first;
+                if (abs(yaw_angle - cur_yaw_angle) < bottom_yaw_angle_difference) {
+                    bottom_neighbor = graph(i, 0);
+                    bottom_yaw_angle_difference = abs(yaw_angle - cur_yaw_angle);
+                }
             } else {
                 continue;
             }
-
         }
+        return std::make_pair(top_neighbor, bottom_neighbor);
     };
 
-    // Given an input graph, find all of its horizontal neighbors. Its horizontal neighbors are defined
+    // Given an input graph and input node, find all of its horizontal neighbors. Its horizontal neighbors are defined
     // as the nodes with the closest y-coordinate measurement to the left and right of the current node
     // that have the same laser id. To find the horizontal neighbors, we iterate through each of the nodes
-    // of the graph. If they have only 2 edges set, we look for that node's horizontal neighbors.
-    std::pair <GraphNode, GraphNode>
-    find_horizontal_neighbors(Eigen::Matrix <GraphNode, Eigen::Dynamic, Eigen::Dynamic> graph) {
-        return std::make_pair(GraphNode(), GraphNode());
-
+    // of the graph. If they meet the requirements, we set the current node's neighbors.
+    std::pair<GraphNode, GraphNode>
+    find_horizontal_neighbors(GraphNode cur_node, Eigen::Matrix <GraphNode, Eigen::Dynamic, Eigen::Dynamic> graph) {
+        int cur_laser_id = cur_node.get_laser_id();
+        pcl::PointXYZI shot = cur_node.get_shot();
+        GraphNode left_neighbor;
+        GraphNode right_neighbor;
+        // Case when horizontal neighbors are already set.
+        if (cur_node.get_edges().size() == 4) {
+            return std::make_pair(left_neighbor, right_neighbor);
+        }
+        double cur_y_coordinate = shot.y;
+        double left_y_delta = -300.0;
+        double right_y_delta = 300.0;
+        // Iterate through every node in the graph to ensure we set the vertical neighbors.
+        for (size_t i = 0; i < graph.cols(); ++i) {
+            // Case when node belongs to different laser id.
+            if (graph(i, 0).get_laser_id() != cur_laser_id) {
+                continue;
+                // Case when node belongs to same laser id, we check it.
+            } else {
+                pcl::PointXYZI potential_shot = graph(i, 0).get_shot();
+                // Case when node is to the left and closer than previous left neighbor.
+                //
+                // left_neighbor ------------ cur_node
+                //                    |
+                //                    |
+                //            new_left_neighbor
+                if (potential_shot.y - cur_y_coordinate > left_y_delta) {
+                    left_neighbor = graph(i, 0);
+                    left_y_delta = potential_shot.y - cur_y_coordinate;
+                    // Case when node is to the right and closer than previous right neighbor.
+                    //
+                    // cur_node ------------ right_neighbor
+                    //               |
+                    //               |
+                    //      new_right_neighbor
+                } else if (potential_shot.y - cur_y_coordinate < right_y_delta) {
+                    right_neighbor = graph(i, 0);
+                    right_y_delta = potential_shot.y - cur_y_coordinate;
+                } else {
+                    continue;
+                }
+            }
+        }
+        return std::make_pair(left_neighbor, right_neighbor);
 
     };
 
