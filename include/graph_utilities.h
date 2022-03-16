@@ -44,7 +44,7 @@ namespace graph_utilities {
                     top_neighbor = graph(i, 0);
                     top_yaw_angle_difference = abs(yaw_angle - cur_yaw_angle);
                 }
-            // Case when node belongs to laser directly below current laser.
+                // Case when node belongs to laser directly below current laser.
             } else if (graph(i, 0).get_laser_id() - cur_laser_id == -1) {
                 pcl::PointXYZI potential_shot = graph(i, 0).get_shot();
                 double yaw_angle = cartesian_to_polar_coordinates(potential_shot.x, potential_shot.y).first;
@@ -118,16 +118,18 @@ namespace graph_utilities {
     //      3. Using the node's edges, compute the normal.
     // @input Eigen::Matrix<GraphNode, Eigen::Dynamic, Eigen::Dynamic> graph: The undirected graph
     // @returns success upon creating a undirected graph where all of the neighbors, edges and normals are set for each node.
-    void create_undirected_graph(Eigen::Matrix<GraphNode, Eigen::Dynamic, Eigen::Dynamic> graph) {
-        for(size_t i = 0; i < graph.rows(); ++i){
-            for(size_t j = 0; j < graph.cols(); ++j){
-                auto cur_node = graph(i,j);
-                auto vert_neighbors = find_vertical_neighbors(cur_node, graph);
-                cur_node.set_vertical_neighbors(vert_neighbors);
+    Eigen::Matrix <GraphNode, Eigen::Dynamic, Eigen::Dynamic>
+    create_undirected_graph(Eigen::Matrix <GraphNode, Eigen::Dynamic, Eigen::Dynamic> graph) {
+        for (size_t i = 0; i < graph.rows(); ++i) {
+            for (size_t j = 0; j < graph.cols(); ++j) {
+                auto cur_node = graph(i, j);
+                auto vertical_neighbors = find_vertical_neighbors(cur_node, graph);
+                cur_node.set_vertical_neighbors(vertical_neighbors);
                 auto horz_neighbors = find_horizontal_neighbors(cur_node, graph);
                 cur_node.set_horizontal_neighbors(horz_neighbors);
             }
         }
+        return graph;
     };
 
 
