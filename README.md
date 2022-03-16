@@ -38,7 +38,15 @@ catkin_make
 Running the ROS Nodes
 -----
 
-Placeholder until project is finished.
+```
+roscore
+```
+```
+rosbag play -l ../ros_bag_files/kitti_2011_09_26_drive_0084_synced.bag 
+```
+``` 
+rosrun ground_classifier GroundClassifier
+```
 
 -----
 Useful Links
