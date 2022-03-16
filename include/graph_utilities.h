@@ -16,16 +16,13 @@ namespace graph_utilities {
         return std::make_pair(theta_rad, radius_m);
     }
 
-    void create_undirected_graph() {
-
-    };
-
     // Given an input graph and input node, find its vertical edges. Its vertical edges are defined as
     // the nodes with the closest yaw angle in the laser id above and below the current laser id.
     // To find the vertical neighbors, we iterate through each of the nodes of the graph. If they
     // meet the requirements, the input node's neighbors are set.
     std::pair <GraphNode, GraphNode>
-    find_vertical_neighbors(GraphNode cur_node, Eigen::Matrix <GraphNode, Eigen::Dynamic, Eigen::Dynamic> graph) {
+    find_vertical_neighbors(GraphNode cur_node,
+                            const Eigen::Matrix <GraphNode, Eigen::Dynamic, Eigen::Dynamic> &graph) {
         int cur_laser_id = cur_node.get_laser_id();
         pcl::PointXYZI shot = cur_node.get_shot();
         GraphNode top_neighbor;
@@ -47,7 +44,7 @@ namespace graph_utilities {
                     top_neighbor = graph(i, 0);
                     top_yaw_angle_difference = abs(yaw_angle - cur_yaw_angle);
                 }
-                // Case when node belongs to laser directly below current laser.
+            // Case when node belongs to laser directly below current laser.
             } else if (graph(i, 0).get_laser_id() - cur_laser_id == -1) {
                 pcl::PointXYZI potential_shot = graph(i, 0).get_shot();
                 double yaw_angle = cartesian_to_polar_coordinates(potential_shot.x, potential_shot.y).first;
@@ -66,8 +63,9 @@ namespace graph_utilities {
     // as the nodes with the closest y-coordinate measurement to the left and right of the current node
     // that have the same laser id. To find the horizontal neighbors, we iterate through each of the nodes
     // of the graph. If they meet the requirements, we set the current node's neighbors.
-    std::pair<GraphNode, GraphNode>
-    find_horizontal_neighbors(GraphNode cur_node, Eigen::Matrix <GraphNode, Eigen::Dynamic, Eigen::Dynamic> graph) {
+    std::pair <GraphNode, GraphNode>
+    find_horizontal_neighbors(GraphNode cur_node,
+                              const Eigen::Matrix <GraphNode, Eigen::Dynamic, Eigen::Dynamic> &graph) {
         int cur_laser_id = cur_node.get_laser_id();
         pcl::PointXYZI shot = cur_node.get_shot();
         GraphNode left_neighbor;
@@ -112,6 +110,24 @@ namespace graph_utilities {
         }
         return std::make_pair(left_neighbor, right_neighbor);
 
+    };
+
+    // Given an input graph, do the following for every node within the graph:
+    //      1. Find all the neighbors, both vertical and horizontal.
+    //      2. Using each node's four neighbors, compute the edges of each node.
+    //      3. Using the node's edges, compute the normal.
+    // @input Eigen::Matrix<GraphNode, Eigen::Dynamic, Eigen::Dynamic> graph: The undirected graph
+    // @returns success upon creating a undirected graph where all of the neighbors, edges and normals are set for each node.
+    void create_undirected_graph(Eigen::Matrix<GraphNode, Eigen::Dynamic, Eigen::Dynamic> graph) {
+        for(size_t i = 0; i < graph.rows(); ++i){
+            for(size_t j = 0; j < graph.cols(); ++j){
+                auto cur_node = graph(i,j);
+                auto vert_neighbors = find_vertical_neighbors(cur_node, graph);
+                cur_node.set_vertical_neighbors(vert_neighbors);
+                auto horz_neighbors = find_horizontal_neighbors(cur_node, graph);
+                cur_node.set_horizontal_neighbors(horz_neighbors);
+            }
+        }
     };
 
 

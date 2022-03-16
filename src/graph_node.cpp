@@ -16,23 +16,31 @@ GraphNode::~GraphNode() {};
 
 void GraphNode::compute_normal_by_neighbors() {
     // Check size
-    if (edges_.size() < 2) {
-        ROS_ERROR("Node does not contain enough edges to compute a normal.");
-    }
-
-    for (int i = 0; i < edges_.size(); ++i) {
-        if (i == edges_.size() - 1) {
-            normal_ += edges_[i].cross(edges_[0]);
-        } else {
-            normal_ += edges_[i].cross(edges_[i + 1]);
-        }
-    }
-
-    normal_ /= edges_.size();
+//    if (edges_.size() < 2) {
+//        ROS_ERROR("Node does not contain enough edges to compute a normal.");
+//    }
+//
+//    for (int i = 0; i < edges_.size(); ++i) {
+//        if (i == edges_.size() - 1) {
+//            normal_ += edges_[i].cross(edges_[0]);
+//        } else {
+//            normal_ += edges_[i].cross(edges_[i + 1]);
+//        }
+//    }
+//
+//    normal_ /= edges_.size();
 }
 
-void GraphNode::set_neighbors(const std::vector <Eigen::Vector3d> &neighbors) {
-    edges_ = neighbors;
+void GraphNode::set_vertical_neighbors(const std::pair <GraphNode, GraphNode> &vert_neighbors) {
+    edges_.push_back(vert_neighbors.first);
+    edges_.push_back(vert_neighbors.second);
+    return;
+}
+
+void GraphNode::set_horizontal_neighbors(const std::pair <GraphNode, GraphNode> &horz_neighbors) {
+    edges_.push_back(horz_neighbors.first);
+    edges_.push_back(horz_neighbors.second);
+    return;
 }
 
 void GraphNode::remove_neighbor(const int neighbor_index) {}
@@ -41,15 +49,15 @@ Eigen::Vector3d GraphNode::get_normal() {
     return normal_;
 }
 
-std::vector<Eigen::Vector3d> GraphNode::get_edges(){
+std::vector <GraphNode> GraphNode::get_edges() {
     return edges_;
 };
 
-int GraphNode::get_laser_id(){
+int GraphNode::get_laser_id() const {
     return ring_id_;
 }
 
-pcl::PointXYZI GraphNode::get_shot(){
+pcl::PointXYZI GraphNode::get_shot() const {
     return shot_;
 };
 

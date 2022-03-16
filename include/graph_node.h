@@ -10,31 +10,33 @@
 #include <eigen3/Eigen/Dense>
 
 class GraphNode {
- public:
-	 GraphNode();
-	 
-	 GraphNode(const pcl::PointXYZI &point, const int ring_num);
-	 
-	 ~GraphNode();
+public:
+    GraphNode();
 
-	 void compute_normal_by_neighbors();
-	 
-	 void set_neighbors(const std::vector<Eigen::Vector3d> &neighbors);
+    GraphNode(const pcl::PointXYZI &point, const int ring_num);
 
-	 void remove_neighbor(const int neighbor_index);
-		
-	 Eigen::Vector3d get_normal();
+    ~GraphNode();
 
-     std::vector<Eigen::Vector3d> get_edges();
+    void compute_normal_by_neighbors();
 
-     int get_laser_id();
+    void set_vertical_neighbors(const std::pair <GraphNode, GraphNode> &vert_neighbors);
 
-     pcl::PointXYZI get_shot();
+    void set_horizontal_neighbors(const std::pair <GraphNode, GraphNode> &horz_neighbors);
 
- private:
-	 pcl::PointXYZI shot_;
-	 std::vector<Eigen::Vector3d> edges_;
-	 Eigen::Vector3d normal_;
-     int id_;
-     int ring_id_;
+    void remove_neighbor(const int neighbor_index);
+
+    Eigen::Vector3d get_normal();
+
+    std::vector <GraphNode> get_edges();
+
+    int get_laser_id() const;
+
+    pcl::PointXYZI get_shot() const;
+
+private:
+    pcl::PointXYZI shot_;
+    std::vector <GraphNode> edges_;
+    Eigen::Vector3d normal_;
+    int id_;
+    int ring_id_;
 };
