@@ -136,7 +136,7 @@ add_library(${PROJECT_NAME}
 		src/graph_node.cpp
 		src/undirected_graph.cpp
 		include/graph_utilities.h
-)
+		include/nanoflann.h include/undirected_graph_utilities.h)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -220,7 +220,6 @@ target_link_libraries(
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 catkin_add_gtest(${PROJECT_NAME}-test
 		src/graph_node_test.cpp
-		src/undirected_graph_test.cpp
 )
 if(TARGET ${PROJECT_NAME}-test)
 	target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME} ${Boost_LIBRARIES} ${catkin_LIBRARIES})

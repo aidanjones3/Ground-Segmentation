@@ -12,6 +12,7 @@
 #include <map>
 #include "graph_node.h"
 
+using namespace graph_node;
 
 
 class UndirectedGraph {
@@ -24,11 +25,11 @@ class UndirectedGraph {
 
     size_t get_graph_size();
 
-    Eigen::Matrix<GraphNode, Eigen::Dynamic, Eigen::Dynamic> get_graph();
+    Eigen::Matrix<graph_node::GraphNode, Eigen::Dynamic, Eigen::Dynamic> get_graph();
 
  private:
-    // Graph is stored as an Eigen matrix of GraphNoes.
-    Eigen::Matrix<GraphNode, Eigen::Dynamic, Eigen::Dynamic> graph_;
+    // Graph is stored as an Eigen matrix of GraphNodes.
+    Eigen::Matrix<graph_node::GraphNode, Eigen::Dynamic, Eigen::Dynamic> graph_;
 
 
 };

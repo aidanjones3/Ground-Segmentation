@@ -8,6 +8,7 @@
 #include <pcl/point_types.h>
 #include <sensor_msgs/point_cloud2_iterator.h>
 #include "graph_utilities.h"
+#include "undirected_graph_utilities.h"
 
 void velodyneCallback(const sensor_msgs::PointCloud2 &msg) {
     ROS_INFO("Number of Points in Message: [%f]", static_cast<double>(msg.width));
@@ -18,7 +19,7 @@ void velodyneCallback(const sensor_msgs::PointCloud2 &msg) {
     ROS_INFO("Number of points in graph: [%f]", static_cast<double>(graph.get_graph_size()));
 
     ros::Time begin = ros::Time::now();
-    const auto graph_new = graph_utilities::create_undirected_graph(graph.get_graph());
+    const auto graph_new = undirected_graph_utilities::create_undirected_graph(graph.get_graph());
     ros::Time end = ros::Time::now();
     ROS_INFO("Time to find neighbors in current data frame: [%f]",
              static_cast<double>(end.toSec() - begin.toSec()));

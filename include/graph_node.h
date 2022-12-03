@@ -9,34 +9,58 @@
 #include <sensor_msgs/point_cloud2_iterator.h>
 #include <eigen3/Eigen/Dense>
 
-class GraphNode {
-public:
-    GraphNode();
 
-    GraphNode(const pcl::PointXYZI &point, const int ring_num);
+namespace graph_node {
 
-    ~GraphNode();
+    class GraphNode {
 
-    void compute_normal_by_neighbors();
+    struct EdgeNode {
+        std::shared_ptr<GraphNode> node;
+        Eigen::Vector3d edge_to_node;
+    };
 
-    void set_vertical_neighbors(const std::pair <GraphNode, GraphNode> &vert_neighbors);
+    public:
+        GraphNode();
 
-    void set_horizontal_neighbors(const std::pair <GraphNode, GraphNode> &horz_neighbors);
+        GraphNode(const pcl::PointXYZI &point, int ring_num);
 
-    void remove_neighbor(const int neighbor_index);
+        ~GraphNode();
 
-    Eigen::Vector3d get_normal();
+        void set_normal_by_edges();
 
-    std::vector <GraphNode> get_edges();
+        void set_edges_from_neighbors();
 
-    int get_laser_id() const;
+        void set_upper_neighbor(std::shared_ptr<GraphNode> upper_node);
 
-    pcl::PointXYZI get_shot() const;
+        void set_lower_neighbor(std::shared_ptr<GraphNode> lower_node);
 
-private:
-    pcl::PointXYZI shot_;
-    std::vector <GraphNode> edges_;
-    Eigen::Vector3d normal_;
-    int id_;
-    int ring_id_;
-};
+        void set_right_neighbor(std::shared_ptr<GraphNode> right_node);
+
+        void set_left_neighbor(std::shared_ptr<GraphNode> left_node);
+
+        void remove_neighbor(int neighbor_index);
+
+        Eigen::Vector3d get_normal();
+
+        std::vector<Eigen::Vector3d> get_edges();
+
+        int get_laser_id() const;
+
+        pcl::PointXYZI get_shot() const;
+
+    private:
+        pcl::PointXYZI shot_;
+        EdgeNode upper_neighbor_;
+        EdgeNode lower_neighbor_;
+        EdgeNode right_neighbor_;
+        EdgeNode left_neighbor_;
+        Eigen::Vector3d normal_;
+        int id_;
+        int ring_id_;
+    };
+
+} // namespace
+
+
+
+
