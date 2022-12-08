@@ -76,6 +76,16 @@ namespace graph_node {
         return shot_;
     };
 
+    std::vector<pcl::PointXYZI> GraphNode::get_neighbor_shots() {
+        std::vector<pcl::PointXYZI> neighbor_shots;
+        neighbor_shots.push_back(upper_neighbor_.node->get_shot());
+        neighbor_shots.push_back(right_neighbor_.node->get_shot());
+        neighbor_shots.push_back(lower_neighbor_.node->get_shot());
+        neighbor_shots.push_back(left_neighbor_.node->get_shot());
+
+        return neighbor_shots;
+    }
+
 }
 
 

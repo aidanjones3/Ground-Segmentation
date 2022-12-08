@@ -40,6 +40,8 @@ namespace graph_node {
 
         void remove_neighbor(int neighbor_index);
 
+        std::vector<pcl::PointXYZI> get_neighbor_shots();
+
         Eigen::Vector3d get_normal();
 
         std::vector<Eigen::Vector3d> get_edges();
@@ -58,6 +60,8 @@ namespace graph_node {
         int id_;
         int ring_id_;
     };
+
+
 
 } // namespace
 

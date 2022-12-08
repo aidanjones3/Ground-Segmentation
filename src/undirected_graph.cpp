@@ -24,7 +24,7 @@ UndirectedGraph::UndirectedGraph(const sensor_msgs::PointCloud2 &msg) {
     pcl_conversions::toPCL(msg, pcl_cloud);
 
     // Deallocating matrix safely and setting new size
-    graph_.resize(0,0);
+    graph_.resize(0, 0);
     graph_.resize(msg.width, 1);
 
     // Create and add nodes to the undirected graph.
@@ -37,7 +37,8 @@ UndirectedGraph::UndirectedGraph(const sensor_msgs::PointCloud2 &msg) {
         const auto x = static_cast<float>(pcl_cloud.data[i * pcl_cloud.point_step + pcl_cloud.fields[0].offset]);
         const auto y = static_cast<float>(pcl_cloud.data[i * pcl_cloud.point_step + pcl_cloud.fields[1].offset]);
         const auto z = static_cast<float>(pcl_cloud.data[i * pcl_cloud.point_step + pcl_cloud.fields[2].offset]);
-        const auto intensity = static_cast<float>(pcl_cloud.data[i * pcl_cloud.point_step + pcl_cloud.fields[3].offset]);
+        const auto intensity = static_cast<float>(pcl_cloud.data[i * pcl_cloud.point_step +
+                                                                 pcl_cloud.fields[3].offset]);
         // const int laser_id = static_cast<int>(pcl_cloud.data[i * pcl_cloud.point_step + pcl_cloud.fields[4].offset]);
         point.x = x;
         point.y = y;
@@ -45,7 +46,7 @@ UndirectedGraph::UndirectedGraph(const sensor_msgs::PointCloud2 &msg) {
         point.intensity = intensity;
 
         const auto quadrant_of_point = undirected_graph_utilities::get_quadrant_from_point(x, y);
-        if(quadrant_of_point == 4 && previous_quadrant_ == 1 && ring_id < num_velodyne_lasers_ - 1){
+        if (quadrant_of_point == 4 && previous_quadrant_ == 1 && ring_id < num_velodyne_lasers_ - 1) {
             ring_id += 1;
         }
 
@@ -61,11 +62,11 @@ UndirectedGraph::UndirectedGraph(const sensor_msgs::PointCloud2 &msg) {
 
 UndirectedGraph::~UndirectedGraph() {};
 
-size_t UndirectedGraph::get_graph_size(){
+size_t UndirectedGraph::get_graph_size() {
     return graph_.size();
 }
 
-Eigen::Matrix<GraphNode, Eigen::Dynamic, Eigen::Dynamic> UndirectedGraph::get_graph(){
+Eigen::Matrix<GraphNode, Eigen::Dynamic, Eigen::Dynamic> UndirectedGraph::get_graph() {
     return graph_;
 };
 
@@ -179,10 +180,30 @@ void UndirectedGraph::create_undirected_graph() {
             auto horz_neighbors = find_horizontal_neighbors(cur_node);
             cur_node.set_left_neighbor(std::make_shared<graph_node::GraphNode>(horz_neighbors.first));
             cur_node.set_right_neighbor(std::make_shared<graph_node::GraphNode>(horz_neighbors.second));
-            graph_(i,j) = cur_node;
+            graph_(i, j) = cur_node;
         }
     }
     ros::Time end = ros::Time::now();
     ROS_INFO("Time to find neighbors in current data frame: [%f]",
              static_cast<double>(end.toSec() - begin.toSec()));
 };
+
+visualization_msgs::MarkerArray UndirectedGraph::create_marker_array_from_graph(ros::Time current_timestamp) {
+    visualization_msgs::MarkerArray marker_array;
+    for (size_t i = 0; i < graph_.rows(); ++i) {
+        for (size_t j = 0; j < graph_.cols(); ++j) {
+            auto current_node = graph_(i, j);
+            auto current_shot = current_node.get_shot();
+            auto neighboring_shots = current_node.get_neighbor_shots();
+            for (auto shot : neighboring_shots) {
+                visualization_msgs::Marker marker = undirected_graph_utilities::create_marker_from_vector(current_shot,
+                                                                                                          shot,
+                                                                                                          current_timestamp);
+                marker_array.markers.push_back(marker);
+            }
+
+        }
+    }
+
+    return marker_array;
+}

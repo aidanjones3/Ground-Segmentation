@@ -11,6 +11,7 @@
 #include <unordered_map>
 #include <map>
 #include "graph_node.h"
+#include <visualization_msgs/MarkerArray.h>
 
 using namespace graph_node;
 
@@ -49,6 +50,8 @@ public:
     // meet the requirements, the input node's neighbors are set.
     std::pair<graph_node::GraphNode, graph_node::GraphNode>
     find_vertical_neighbors(graph_node::GraphNode cur_node);
+
+    visualization_msgs::MarkerArray create_marker_array_from_graph(ros::Time current_timestamp);
 
 
     std::pair<double, double> cartesian_to_polar_coordinates(double x, double y);
